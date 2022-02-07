@@ -10,7 +10,7 @@ from random import *
 LARGEUR= 1024#256       hauteur de la fenêtre
 HAUTEUR= 512#256      #largeur de la fenêtre
 ROUGE=(255,0,0)     # définition de 3 couleurs
-VERT=(0,255,0)
+VERT=(10,235,20)
 BLEU=(0,0,255)
 
 #Utilisation de la bibliothèque pygame
@@ -35,11 +35,12 @@ def dessineDecor():
     """
     pygame.draw.rect(fenetre, (30,30,30), [0, 0, LARGEUR, HAUTEUR],0)
     pygame.draw.rect(fenetre, ROUGE, [1, 1, LARGEUR-1, HAUTEUR-1],10)
-    for i in range(10):
-        pygame.draw.circle(fenetre, ROUGE, (randint(20,LARGEUR-20),randint(20,HAUTEUR-20)), randint(1,20))
-    for i in range(10):
+    for i in range(20):
+        pygame.draw.circle(fenetre, (randint(150,255),randint(0,70),randint(0,70)) , (randint(20,LARGEUR-20),randint(20,HAUTEUR-20)), randint(1,20))
+    for i in range(20):
         pygame.draw.circle(fenetre, (randint(0,50),randint(0,50),randint(150,255)), (randint(20,LARGEUR-20),randint(20,HAUTEUR-20)), randint(1.0,20.0))
-
+    pygame.draw.rect(fenetre, ROUGE, [LARGEUR//2-140, HAUTEUR-45, 140, 45],0)
+    afficheTexte(LARGEUR//2-130,HAUTEUR-35,"Manche n°" + str(manche))
     #pygame.draw.circle(fenetre, ROUGE, (x,y), 10)      #cercle plein aux coord x,y de rayon 10
     #pygame.draw.rect(fenetre, BLEU, [x, y, 10, 10],0)  #rectangle plein aux coord x,y
 
@@ -47,7 +48,7 @@ def afficheTexte(x,y,txt):
     """
     affiche un texte aux coordonnées x,y
     """
-    texteAfficher = font.render(str(txt), True, VERT)
+    texteAfficher = font.render(str(txt), True, (200,200,200))
     fenetre.blit(texteAfficher,(x,y))
 
 def collisionMur(x,y):
@@ -93,10 +94,10 @@ def deplacementmoto():
             x=playerX
             y=playerY-1
         elif direction1=='bas':
-            x=playerX     #a completer
+            x=playerX     
             y=playerY+1
         elif direction1=='droite':
-            x=playerX+1     #a completer
+            x=playerX+1     
             y=playerY
         elif direction1=='gauche':
             x=playerX-1
@@ -111,10 +112,10 @@ def deplacementmoto():
             x=player2X
             y=player2Y-1
         elif direction2=='bas':
-            x=player2X     #a completer
+            x=player2X     
             y=player2Y+1
         elif direction2=='droite':
-            x=player2X+1     #a completer
+            x=player2X+1     
             y=player2Y
         elif direction2=='gauche':
             x=player2X-1
@@ -137,11 +138,9 @@ while loop:
             if event.key == pygame.K_ESCAPE or event.unicode == 'p': #touche q pour quitter
                 loop = False
             #fenetre.set_at((200, 200), color)
-
     keys = pygame.key.get_pressed()         #recupération des touches appuyées en continu
     if keys[pygame.K_UP]:    #est-ce la touche UP
-        direction1 = 'haut'
-        
+        direction1 = 'haut'    
     elif keys[pygame.K_DOWN]:  #est-ce la touche DOWN
         direction1 = 'bas'
     elif keys[pygame.K_RIGHT]:  #est-ce la touche RIGHT
@@ -155,10 +154,9 @@ while loop:
     elif keys[pygame.K_d]:  #est-ce la touche RIGHT
         direction2 = 'droite'
     elif keys[pygame.K_q]:  #est-ce la touche LEFT
-        direction2 = 'gauche'
-    #fenetre.fill((0,0,0))   #efface la fenêtre, non utilisé ici
-
+        direction2 = 'gauche'    
     if deplacementmoto()[0]==True or deplacementmoto()[1]==True:
+        p1,p2 = deplacementmoto()
         fenetre.fill((0,0,0))
         if tempsPartie < 70:
             playerX=LARGEUR//2
@@ -170,12 +168,19 @@ while loop:
             tempsPartie=0
             dessineDecor()
         else:
-            findemanche(deplacementmoto()[0],deplacementmoto()[1])
+            findemanche(p1,p2)
     frequence.tick(60)
     pygame.display.update() #mets à jour la fenêtre graphique
     tempsPartie+=1
+#pygame.draw.rect(fenetre, (30,30,30), [0, 0, LARGEUR, HAUTEUR],0)   #efface la fenêtre
+
+afficheTexte(100,150,"SCORE, gagnant par manche :")
+for i in range(3):
+    afficheTexte(i*200+100,HAUTEUR//2-30,"manche "+str(i+1))
+for j in range(2):
+    for i in range(len(score)//2):
+        afficheTexte(i*200+100,HAUTEUR//2+30*j,score[i+3*j])
 print(score)
+pygame.display.update()
+pygame.time.delay(10000)
 pygame.quit()
-#print('temps de jeu :',tempsPartie)
-
-
