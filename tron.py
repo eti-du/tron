@@ -1,7 +1,7 @@
 """
 NSI
 Programme du tron
-Duroy Etienne 1G1
+1G1
 """
 import pygame
 from random import *
